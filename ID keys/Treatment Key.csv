@@ -1,0 +1,17 @@
+﻿Plot,Treatment
+A1,50_percent
+A2,100_percent
+A3,Control
+B1,100_percent
+B2,Control
+B3,50_percent
+C1,Control
+C2,100_percent
+C3,50_percent
+D1,50_percent
+D2,Control
+D3,100_percent
+2_,standard
+20,standard
+CO,standard
+AM,ambient

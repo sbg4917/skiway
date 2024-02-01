@@ -1,3 +1,5 @@
+# Import and correct TomsT soil moisture and temperature data
+# Sarah Goldsmith 2024-02-01
 
 library(data.table)
 library(stringr)
@@ -19,7 +21,7 @@ alldata <- rbindlist(alldata,  idcol = T)[, c(1, 3, 5:8)]
 colnames(alldata) <- c("ID", "DateTime", "T1", "T2", "T3", "Hu")
 
 #read in sensor ID key
-ID.key <- read.csv("TomsT ID.csv")
+ID.key <- read.csv("/Users/f00502n/Documents/Dartmouth/Skiway/Skiway/ID keys/TomsT ID.csv")
 ID.key$ID <- as.character(ID.key$ID)
 ID <- paste(ID.key$ID, collapse = "|")
 alldata$ID2 <- str_extract(alldata$ID, ID)
@@ -32,7 +34,7 @@ alldata$VWC.default <- (alldata$Hu ^2 * -1.34E-8 + alldata$Hu * .000249622 - 0.1
 alldata$VWC.sandy.loam.B <- (alldata$Hu ^2 * -9E-10 + alldata$Hu * .000261847 - 0.158618303) *100
 
 #
-treatment.key <-read.csv("/Users/f00502n/Documents/Dartmouth/Skiway/TomsT/manual measurement/Treatment Key.csv")
+treatment.key <-read.csv("/Users/f00502n/Documents/Dartmouth/Skiway/Skiway/ID keys/Treatment Key.csv")
 alldata <- merge(alldata, treatment.key, by = "Plot")
 
 manual.STM <-read.csv("/Users/f00502n/Documents/Dartmouth/Skiway/TomsT/manual measurement/STM - Sheet1.csv") 
@@ -40,8 +42,6 @@ manual.STM$DateTime <- paste(manual.STM$Date, "10:00")
 manual.STM$DateTime <- as.POSIXct(manual.STM$DateTime, format = "%m/%d/%y %H:%M")
 #merge with TomsT
 comparison <- merge(manual.STM, alldata, by = c("DateTime", "Plot"))
-
-
 
 #trim to start when TomsT were deployed
 alldata2 <- alldata %>%
