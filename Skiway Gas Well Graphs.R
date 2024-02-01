@@ -90,7 +90,24 @@ mod_try <- lmer(corrCO2 ~ Depth*Treatment + Block + (1|Plot2:Quadrant), data = p
 summary(mod_try)
 anova(mod_try)
 
+# Model Iterations: CorrCO2, pretreatment data--------------------------------------------------------
 
+#find & replace fixed effect combos, pre vs. post treatment
+AIC_comp<-NULL
+mod_try3 <- lmer(corrCO2 ~ Treatment + Depth + Treatment*Depth + (1|Plot), data = pre.treatment) 
+mod_try3.1 <- lmer(corrCO2 ~ Treatment + Depth + Treatment*Depth + (1|Block), data = pre.treatment) 
+mod_try3.2 <- lmer(corrCO2 ~ Treatment + Depth + Treatment*Depth + (1|Quadrant), data = pre.treatment) 
+mod_try3.3 <- lmer(corrCO2 ~ Treatment + Depth + Treatment*Depth + (1|Block/Plot), data = pre.treatment) 
+mod_try3.4 <- lmer(corrCO2 ~ Treatment + Depth + Treatment*Depth + (1|Block/Quadrant), data = pre.treatment) 
+mod_try3.5 <- lmer(corrCO2 ~ Treatment + Depth + Treatment*Depth + (1|Plot/Quadrant), data = pre.treatment) 
+mod_try3.6 <- lmer(corrCO2 ~ Treatment + Depth + Treatment*Depth + (1|Block/Plot/Quadrant), data = pre.treatment) 
+AIC_comp$RE<-c("Plot","Block","Quadrant","Block/Plot","Block/Quadrant","Plot/Quadrant","Block/Plot/Quadrant")
+AIC_test<-AIC(mod_try2.1,mod_try2.2,mod_try2.6,mod_try2,mod_try2.3,mod_try2.5,mod_try2.4)
+AIC_comp$AIC<-AIC_test$AIC
+AIC_comp$TreatmentEffect<-c(anova(mod_try3)[[6]][1],anova(mod_try3.1)[[6]][1],anova(mod_try3.2)[[6]][1],anova(mod_try3.3)[[6]][1],
+                            anova(mod_try3.4)[[6]][1],anova(mod_try3.5)[[6]][1],anova(mod_try3.6)[[6]][1])
+#depth all sig, treatment p 0.010, interaction 0.58
+AIC_comp<-data.frame(AIC_comp)
 
 
 
