@@ -41,7 +41,6 @@ alldata <- alldata %>%
 
 alldata$Depth <- factor(alldata$Depth, levels = c("SNOW", "5", "10", "20", "30"))
 
-#color by block
 
 ggplot(alldata, aes(x = Date, y = corrCO2, color = Treatment, label = Plot)) + geom_point() +
   facet_wrap(~Depth) + geom_text()
@@ -78,7 +77,7 @@ ggplot(averages) + geom_point(aes(x = Date, y = Avg.ARQ, color = Treatment)) +
 pre.treatment <- alldata %>%
   subset(Date < "2024-01-09" )
 
-mod_try <- lmer(corrCO2 ~ Treatment + Block + (1|Plot2:Quadrant), data = pre.treatment) 
+mod_try <- lmer(corrCO2 ~ Depth*Treatment + Block + (1|Plot2:Quadrant), data = pre.treatment) 
 summary(mod_try)
 anova(mod_try)
 
@@ -87,7 +86,7 @@ anova(mod_try)
 post.treatment <- alldata %>%
   subset(Date > "2024-01-17")
 
-mod_try <- lmer(corrCO2 ~ Treatment + Block + (1|Plot2:Quadrant), data = post.treatment) 
+mod_try <- lmer(corrCO2 ~ Depth*Treatment + Block + (1|Plot2:Quadrant), data = post.treatment) 
 summary(mod_try)
 anova(mod_try)
 
